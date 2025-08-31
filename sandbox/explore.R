@@ -27,14 +27,16 @@ input <- tibble(
 
 template <- "letter_template.docx"
 
-# Load template
-
 input |>
   apply(1, function(x) {
     #browser()
     out_doc <- read_docx(template)
-    for (bkm in names(x)) {
-      body_replace_text_at_bkm(out_doc, bkm, x[bkm])
+    for (placeholder in names(x)) {
+      body_replace_all_text(
+        out_doc,
+        old_value = paste0("<<", placeholder, ">>"),
+        new_value = x[placeholder]
+      )
     }
     print(out_doc, target = paste0(x["name"], ".docx"))
   })
