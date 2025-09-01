@@ -26,38 +26,6 @@ input <- tibble::tibble(
   )
 )
 
-
-# # Example values for placeholders
-# replacements <- list(
-#   addr1 = "124 Conch St.",
-#   addr2 = NA, # NA → delete paragraph
-#   city = "Bikini Bottom",
-#   country = "Pacific Ocean",
-#   name = "SpongeBob",
-#   gift = "Jellyfishing Kit"
-# )
-
 # Test
 
 docmerge("letter_template.docx", input)
-
-
-if (!("file_name" %in% names(input))) {
-  input <- input |>
-    dplyr::mutate(file_name = dplyr::row_number())
-}
-
-input |>
-  apply(1, function(x) {
-    #browser()
-    replacements <- x |>
-      as.list()
-    file_name <- x[["file_name"]]
-    replacements[["file_name"]] <- NULL
-
-    sub_placeholders(
-      "letter_template.docx",
-      replacements,
-      paste0(file_name, ".docx")
-    )
-  })

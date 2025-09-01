@@ -2,12 +2,13 @@
 #'
 #' @param template_doc
 #' @param merge_inputs
+#' @param output_path
 #'
 #' @returns
 #'
 #' @export
 #' @examples
-docmerge <- function(template_doc, merge_inputs) {
+docmerge <- function(template_doc, merge_inputs, output_path = "./") {
   if (!("file_name" %in% names(merge_inputs))) {
     merge_inputs <- merge_inputs |>
       dplyr::mutate(file_name = dplyr::row_number())
@@ -24,7 +25,7 @@ docmerge <- function(template_doc, merge_inputs) {
       sub_placeholders(
         template_doc,
         replacements,
-        paste0(file_name, ".docx")
+        paste0(output_path, "/", file_name, ".docx")
       )
     })
 }
