@@ -4,10 +4,16 @@
 \alias{docmerge}
 \title{Generate word documents from template and dataframe of inputs}
 \usage{
-docmerge(template_doc, merge_inputs, output_path = "./")
+docmerge(
+  template_doc,
+  merge_inputs,
+  output_path = "./",
+  ph_start = "<<",
+  ph_end = ">>"
+)
 }
 \arguments{
-\item{output_path}{}
+\item{ph_end}{}
 }
 \description{
 Generate word documents from template and dataframe of inputs
