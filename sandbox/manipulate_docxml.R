@@ -27,5 +27,10 @@ input <- tibble::tibble(
 )
 
 # Test
+template_path <- system.file(
+  "extdata",
+  "letter_template.docx",
+  package = "docmerge"
+)
 
-docmerge("letter_template.docx", input)
+docmerge(template_path, input)

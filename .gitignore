@@ -1,3 +1,4 @@
 *.docx
 settings.json
 .Rproj.user
+!inst/extdata/letter_template.docx
