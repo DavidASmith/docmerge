@@ -1,28 +1,31 @@
 library(officer)
+devtools::load_all()
 
-# Function to delete paragraph containing placeholder if value is NA
-delete_paragraph_if_na <- function(doc, placeholder, value) {
-  if (!is.na(value)) {
-    return(doc)
-  }
 
-  # Move cursor to paragraph containing placeholder
-  pos <- docx_summary(doc)
-  # Create the full placeholder with angle brackets
-  full_placeholder <- paste0("<<", placeholder, ">>")
-  para_id <- pos$doc_index[
-    grepl(full_placeholder, pos$text) & pos$content_type == "paragraph"
-  ]
+input <- tibble::tibble(
+  addr1 = c(
+    "124 Conch St.",
+    "32 Windsor Gardens",
+    "20 Ingram St.",
+    "127 Inkerman Terrace"
+  ),
+  addr2 = c("Bikini Bottom", NA, "Forest Hills", NA),
+  city = c("Pacific Ocean", "London", "New York", "Newcastle"),
+  country = c(NA, "UK", "USA", "UK"),
+  name = c(
+    "Spongebob Squarepants",
+    "Paddington Bear",
+    "Peter Parker",
+    "Terry Collier"
+  ),
+  gift = c(
+    "crabby patties",
+    "marmalade sandwiches",
+    "radioactive spiders",
+    "brown ale"
+  )
+)
 
-  if (length(para_id) > 0) {
-    # Set cursor at that paragraph
-    doc <- cursor_reach(doc, keyword = placeholder)
-    # Remove the paragraph at the cursor
-    doc <- body_remove(doc)
-  }
-
-  doc
-}
 
 # Example values for placeholders
 replacements <- list(
@@ -34,29 +37,25 @@ replacements <- list(
   gift = "Jellyfishing Kit"
 )
 
-# Read Word document
-doc <- read_docx("letter_template.docx")
 
-# Replace inline placeholders
-for (ph in names(replacements)) {
-  val <- replacements[[ph]]
+# Test
 
-  if (!is.na(val)) {
-    doc <- body_replace_all_text(
-      doc,
-      old_value = paste0("<<", ph, ">>"),
-      new_value = val,
-      only_at_cursor = FALSE
+if (!("file_name" %in% names(input))) {
+  input <- input |>
+    dplyr::mutate(file_name = dplyr::row_number())
+}
+
+input |>
+  apply(1, function(x) {
+    #browser()
+    replacements <- x |>
+      as.list()
+    file_name <- x[["file_name"]]
+    replacements[["file_name"]] <- NULL
+
+    sub_placeholders(
+      "letter_template.docx",
+      replacements,
+      paste0(file_name, ".docx")
     )
-  }
-}
-
-# Delete paragraphs for NA values
-for (ph in names(replacements)) {
-  val <- replacements[[ph]]
-  doc <- delete_paragraph_if_na(doc, ph, val)
-}
-
-# Save the output to working directory
-print(doc, target = "output.docx")
-
+  })
