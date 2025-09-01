@@ -27,18 +27,20 @@ input <- tibble::tibble(
 )
 
 
-# Example values for placeholders
-replacements <- list(
-  addr1 = "124 Conch St.",
-  addr2 = NA, # NA → delete paragraph
-  city = "Bikini Bottom",
-  country = "Pacific Ocean",
-  name = "SpongeBob",
-  gift = "Jellyfishing Kit"
-)
-
+# # Example values for placeholders
+# replacements <- list(
+#   addr1 = "124 Conch St.",
+#   addr2 = NA, # NA → delete paragraph
+#   city = "Bikini Bottom",
+#   country = "Pacific Ocean",
+#   name = "SpongeBob",
+#   gift = "Jellyfishing Kit"
+# )
 
 # Test
+
+docmerge("letter_template.docx", input)
+
 
 if (!("file_name" %in% names(input))) {
   input <- input |>
