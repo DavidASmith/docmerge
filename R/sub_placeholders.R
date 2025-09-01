@@ -3,12 +3,20 @@
 #' @param template_doc
 #' @param replacements
 #' @param output_doc
+#' @param ph_start
+#' @param ph_end
 #'
 #' @returns
 #'
 #' @export
 #' @examples
-sub_placeholders <- function(template_doc, replacements, output_doc) {
+sub_placeholders <- function(
+  template_doc,
+  replacements,
+  output_doc,
+  ph_start = "<<",
+  ph_end = ">>"
+) {
   # Read Word document
   doc <- officer::read_docx(template_doc)
 
@@ -19,9 +27,10 @@ sub_placeholders <- function(template_doc, replacements, output_doc) {
     if (!is.na(val)) {
       doc <- officer::body_replace_all_text(
         doc,
-        old_value = paste0("<<", ph, ">>"),
+        old_value = paste0(ph_start, ph, ph_end),
         new_value = val,
-        only_at_cursor = FALSE
+        only_at_cursor = FALSE,
+        fixed = TRUE
       )
     }
   }
@@ -29,7 +38,7 @@ sub_placeholders <- function(template_doc, replacements, output_doc) {
   # Delete paragraphs for NA values
   for (ph in names(replacements)) {
     val <- replacements[[ph]]
-    doc <- delete_paragraph_if_na(doc, ph, val)
+    doc <- delete_paragraph_if_na(doc, ph, val, ph_start, ph_end)
   }
 
   # Save the output to working directory

@@ -4,10 +4,10 @@
 \alias{delete_paragraph_if_na}
 \title{Deletes the entire paragraph for the placeholder if the value is NA}
 \usage{
-delete_paragraph_if_na(doc, placeholder, value)
+delete_paragraph_if_na(doc, placeholder, value, ph_start = "<<", ph_end = ">>")
 }
 \arguments{
-\item{value}{}
+\item{ph_end}{}
 }
 \description{
 Deletes the entire paragraph for the placeholder if the value is NA
