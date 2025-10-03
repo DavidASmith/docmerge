@@ -1,10 +1,10 @@
 #' Deletes the entire paragraph for the placeholder if the value is NA
 #'
-#' @param doc
-#' @param placeholder
-#' @param value
+#' @param doc A Word document object created by officer
+#' @param placeholder The placeholder name without angle brackets
+#' @param value The value to check for NA
 #'
-#' @returns
+#' @returns A Word document object with the paragraph removed if value is NA
 #'
 #' @export
 #' @examples
@@ -13,19 +13,33 @@ delete_paragraph_if_na <- function(doc, placeholder, value) {
     return(doc)
   }
 
-  # Move cursor to paragraph containing placeholder
+  # Get initial document summary
   pos <- officer::docx_summary(doc)
+  
   # Create the full placeholder with angle brackets
   full_placeholder <- paste0("<<", placeholder, ">>")
-  para_id <- pos$doc_index[
-    grepl(full_placeholder, pos$text) & pos$content_type == "paragraph"
-  ]
-
-  if (length(para_id) > 0) {
-    # Set cursor at that paragraph
-    doc <- officer::cursor_reach(doc, keyword = placeholder)
-    # Remove the paragraph at the cursor
-    doc <- officer::body_remove(doc)
+  
+  # Find all paragraphs containing the placeholder
+  matching_paras <- which(
+    grepl(full_placeholder, pos$text, fixed = TRUE) & 
+    pos$content_type == "paragraph"
+  )
+  
+  # Process paragraphs in reverse order to maintain correct indices
+  if (length(matching_paras) > 0) {
+    for (i in rev(matching_paras)) {
+      # Get the exact paragraph content
+      para_content <- pos$text[i]
+      
+      # Set cursor to the specific paragraph
+      doc <- officer::cursor_reach(doc, keyword = para_content, exact = TRUE)
+      
+      # Remove the paragraph
+      doc <- officer::body_remove(doc)
+      
+      # Update document summary after each removal
+      pos <- officer::docx_summary(doc)
+    }
   }
 
   doc
