@@ -7,8 +7,21 @@
 docmerge(template_doc, merge_inputs, output_path = "./")
 }
 \arguments{
-\item{output_path}{}
+\item{template_doc}{The path to the template document.}
+
+\item{merge_inputs}{A dataframe or tibble where each row represents a set of
+placeholders and their corresponding values to be replaced in the template.}
+
+\item{output_path}{The directory where the generated documents will be saved.}
+}
+\value{
+A series of Word documents saved to the specified output path, each
+corresponding to a row in the merge_inputs dataframe with placeholders replaced
+by their respective values.
 }
 \description{
 Generate word documents from template and dataframe of inputs
+}
+\examples{
+\dontrun{docmerge("template.docx", input_df, "./output")}
 }

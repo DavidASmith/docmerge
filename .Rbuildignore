@@ -1,3 +1,5 @@
 ^docmerge\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^\.vscode$
+^sandbox$

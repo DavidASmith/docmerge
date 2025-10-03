@@ -8,6 +8,7 @@
 #'
 #' @export
 #' @examples
+#' \dontrun{delete_paragraph_if_na(doc, placeholder, value)}
 delete_paragraph_if_na <- function(doc, placeholder, value) {
   if (!is.na(value)) {
     return(doc)
@@ -15,28 +16,28 @@ delete_paragraph_if_na <- function(doc, placeholder, value) {
 
   # Get initial document summary
   pos <- officer::docx_summary(doc)
-  
+
   # Create the full placeholder with angle brackets
   full_placeholder <- paste0("<<", placeholder, ">>")
-  
+
   # Find all paragraphs containing the placeholder
   matching_paras <- which(
-    grepl(full_placeholder, pos$text, fixed = TRUE) & 
-    pos$content_type == "paragraph"
+    grepl(full_placeholder, pos$text, fixed = TRUE) &
+      pos$content_type == "paragraph"
   )
-  
+
   # Process paragraphs in reverse order to maintain correct indices
   if (length(matching_paras) > 0) {
     for (i in rev(matching_paras)) {
       # Get the exact paragraph content
       para_content <- pos$text[i]
-      
+
       # Set cursor to the specific paragraph
       doc <- officer::cursor_reach(doc, keyword = para_content, exact = TRUE)
-      
+
       # Remove the paragraph
       doc <- officer::body_remove(doc)
-      
+
       # Update document summary after each removal
       pos <- officer::docx_summary(doc)
     }
