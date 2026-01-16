@@ -29,17 +29,23 @@ delete_paragraph_if_na <- function(doc, placeholder, value) {
   # Process paragraphs in reverse order to maintain correct indices
   if (length(matching_paras) > 0) {
     for (i in rev(matching_paras)) {
-      # Get the exact paragraph content
-      para_content <- pos$text[i]
-
-      # Set cursor to the specific paragraph
-      doc <- officer::cursor_reach(doc, keyword = para_content, exact = TRUE)
-
-      # Remove the paragraph
+      # Use doc_index to position cursor correctly
+      doc <- officer::cursor_reach(doc, keyword = full_placeholder)
       doc <- officer::body_remove(doc)
 
-      # Update document summary after each removal
+      # Refresh document structure after each removal
       pos <- officer::docx_summary(doc)
+
+      # Check if there are still instances to remove
+      remaining_instances <- which(
+        grepl(full_placeholder, pos$text, fixed = TRUE) &
+          pos$content_type == "paragraph"
+      )
+
+      # If no more instances, break the loop
+      if (length(remaining_instances) == 0) {
+        break
+      }
     }
   }
 

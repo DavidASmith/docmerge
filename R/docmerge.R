@@ -20,7 +20,6 @@ docmerge <- function(template_doc, merge_inputs, output_path = "./") {
 
   merge_inputs |>
     apply(1, function(x) {
-      #browser()
       replacements <- x |>
         as.list()
       file_name <- x[["file_name"]]
@@ -29,7 +28,7 @@ docmerge <- function(template_doc, merge_inputs, output_path = "./") {
       sub_placeholders(
         template_doc,
         replacements,
-        paste0(output_path, "/", file_name, ".docx")
+        paste0(output_path, "/", stringr::str_trim(file_name), ".docx")
       )
     })
 }

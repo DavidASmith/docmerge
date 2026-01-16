@@ -13,24 +13,25 @@ sub_placeholders <- function(template_doc, replacements, output_doc) {
   # Read Word document
   doc <- officer::read_docx(template_doc)
 
-  # Replace inline placeholders
-  for (ph in names(replacements)) {
-    val <- replacements[[ph]]
+  # First, identify and remove paragraphs for NA values
+  # This prevents issues with cursor positioning after text replacements
+  na_placeholders <- names(replacements)[sapply(replacements[[ph]])]
 
-    if (!is.na(val)) {
-      doc <- officer::body_replace_all_text(
+  # Then, replace inline placeholders for non-NA values
+  non_na_replacements <- replacements[!sapply(replacements, is.na)]
+
+  for (ph in names(non_na_replacements)) {
+    val <- non_na_replacements[[ph]]
+
+    # Additional safety check
+    if (!is.na(val) && !is.null(val)) {
+      (doc <- officer::body_replace_all_text(
         doc,
         old_value = paste0("<<", ph, ">>"),
-        new_value = val,
+        new_value = as.character(val),
         only_at_cursor = FALSE
-      )
+      ))
     }
-  }
-
-  # Delete paragraphs for NA values
-  for (ph in names(replacements)) {
-    val <- replacements[[ph]]
-    doc <- delete_paragraph_if_na(doc, ph, val)
   }
 
   # Save the output to working directory
