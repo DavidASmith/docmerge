@@ -4,7 +4,13 @@
 \alias{docmerge}
 \title{Generate word documents from template and dataframe of inputs}
 \usage{
-docmerge(template_doc, merge_inputs, output_path = "./")
+docmerge(
+  template_doc,
+  merge_inputs,
+  output_path = "./",
+  ph_start = "<<",
+  ph_end = ">>"
+)
 }
 \arguments{
 \item{template_doc}{The path to the template document.}
@@ -13,6 +19,10 @@ docmerge(template_doc, merge_inputs, output_path = "./")
 placeholders and their corresponding values to be replaced in the template.}
 
 \item{output_path}{The directory where the generated documents will be saved.}
+
+\item{ph_start}{The string that denotes the start of a placeholder (default is "<<").}
+
+\item{ph_end}{The string that denotes the end of a placeholder (default is ">>").}
 }
 \value{
 A series of Word documents saved to the specified output path, each

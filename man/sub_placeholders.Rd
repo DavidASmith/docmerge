@@ -4,7 +4,13 @@
 \alias{sub_placeholders}
 \title{Subsitute placeholders}
 \usage{
-sub_placeholders(template_doc, replacements, output_doc)
+sub_placeholders(
+  template_doc,
+  replacements,
+  output_doc,
+  ph_start = "<<",
+  ph_end = ">>"
+)
 }
 \arguments{
 \item{template_doc}{The path to the template document.}
