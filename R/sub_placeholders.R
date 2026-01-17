@@ -15,7 +15,12 @@ sub_placeholders <- function(template_doc, replacements, output_doc) {
 
   # First, identify and remove paragraphs for NA values
   # This prevents issues with cursor positioning after text replacements
-  na_placeholders <- names(replacements)[sapply(replacements[[ph]])]
+  na_placeholders <- names(replacements)[sapply(replacements, is.na)]
+
+  # Remove paragraphs containing NA placeholders
+  for (ph in na_placeholders) {
+    doc <- delete_paragraph_if_na(doc, ph, replacements[[ph]])
+  }
 
   # Then, replace inline placeholders for non-NA values
   non_na_replacements <- replacements[!sapply(replacements, is.na)]

@@ -28,4 +28,4 @@ input <- tibble::tibble(
 
 # Test
 
-docmerge("letter_template.docx", input)
+docmerge("inst/extdata/letter_template.docx", input)
