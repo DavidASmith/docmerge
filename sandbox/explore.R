@@ -1,6 +1,7 @@
-# Example dataset of some gifts recieved from fictional characters
+library(tibble)
+library(officer)
 
-gifts <- dplyr::tibble(
+input <- tibble(
   addr1 = c(
     "124 Conch St.",
     "32 Windsor Gardens",
@@ -24,5 +25,18 @@ gifts <- dplyr::tibble(
   )
 )
 
+template <- "letter_template.docx"
 
-usethis::use_data(gifts, overwrite = TRUE)
+input |>
+  apply(1, function(x) {
+    #browser()
+    out_doc <- read_docx(template)
+    for (placeholder in names(x)) {
+      body_replace_all_text(
+        out_doc,
+        old_value = paste0("<<", placeholder, ">>"),
+        new_value = x[placeholder]
+      )
+    }
+    print(out_doc, target = paste0(x["name"], ".docx"))
+  })
