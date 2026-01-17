@@ -28,4 +28,11 @@ input <- tibble::tibble(
 
 # Test
 
-docmerge("inst/extdata/letter_template.docx", input)
+#docmerge("inst/extdata/letter_template.docx", input)
+
+docmerge(
+  "inst/extdata/letter_template_alt_ph.docx",
+  input,
+  ph_start = "[[",
+  ph_end = "]]"
+)

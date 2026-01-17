@@ -4,6 +4,8 @@
 #' @param merge_inputs A dataframe or tibble where each row represents a set of
 #' placeholders and their corresponding values to be replaced in the template.
 #' @param output_path The directory where the generated documents will be saved.
+#' @param ph_start The string that denotes the start of a placeholder (default is "<<").
+#' @param ph_end The string that denotes the end of a placeholder (default is ">>").
 #'
 #' @returns A series of Word documents saved to the specified output path, each
 #' corresponding to a row in the merge_inputs dataframe with placeholders replaced
@@ -12,7 +14,13 @@
 #' @export
 #' @examples
 #' \dontrun{docmerge("template.docx", input_df, "./output")}
-docmerge <- function(template_doc, merge_inputs, output_path = "./") {
+docmerge <- function(
+  template_doc,
+  merge_inputs,
+  output_path = "./",
+  ph_start = "<<",
+  ph_end = ">>"
+) {
   if (!("file_name" %in% names(merge_inputs))) {
     merge_inputs <- merge_inputs |>
       dplyr::mutate(file_name = dplyr::row_number())
@@ -28,7 +36,9 @@ docmerge <- function(template_doc, merge_inputs, output_path = "./") {
       sub_placeholders(
         template_doc,
         replacements,
-        paste0(output_path, "/", stringr::str_trim(file_name), ".docx")
+        paste0(output_path, "/", stringr::str_trim(file_name), ".docx"),
+        ph_start,
+        ph_end
       )
     })
 }
