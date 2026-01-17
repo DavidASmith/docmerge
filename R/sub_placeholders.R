@@ -21,28 +21,35 @@ sub_placeholders <- function(
   # Read Word document
   doc <- officer::read_docx(template_doc)
 
-  # First, identify and remove paragraphs for NA values
+  # First, identify and remove paragraphs for NA/NULL values
   # This prevents issues with cursor positioning after text replacements
-  na_placeholders <- names(replacements)[sapply(replacements, is.na)]
+  # Use a function that handles both NA and NULL properly
+  is_na_or_null <- function(x) {
+    is.null(x) || (length(x) == 1 && is.na(x))
+  }
+  
+  na_placeholders <- names(replacements)[vapply(replacements, is_na_or_null, logical(1))]
 
   # Remove paragraphs containing NA placeholders
   for (ph in na_placeholders) {
-    doc <- delete_paragraph_if_na(doc, ph, replacements[[ph]])
+    doc <- delete_paragraph_if_na(doc, ph, replacements[[ph]], ph_start, ph_end)
   }
 
   # Then, replace inline placeholders for non-NA values
-  non_na_replacements <- replacements[!sapply(replacements, is.na)]
+  non_na_replacements <- replacements[!vapply(replacements, is_na_or_null, logical(1))]
 
   for (ph in names(non_na_replacements)) {
     val <- non_na_replacements[[ph]]
 
     # Additional safety check
     if (!is.na(val) && !is.null(val)) {
+      # Use fixed=TRUE to avoid regex interpretation issues with special characters
       (doc <- officer::body_replace_all_text(
         doc,
         old_value = paste0(ph_start, ph, ph_end),
         new_value = as.character(val),
-        only_at_cursor = FALSE
+        only_at_cursor = FALSE,
+        fixed = TRUE
       ))
     }
   }

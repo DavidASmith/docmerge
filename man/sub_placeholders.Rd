@@ -18,6 +18,10 @@ sub_placeholders(
 \item{replacements}{A named list of placeholders and their corresponding values to replace in the template.}
 
 \item{output_doc}{The path where the modified document will be saved.}
+
+\item{ph_start}{The string that denotes the start of a placeholder (default is "<<").}
+
+\item{ph_end}{The string that denotes the end of a placeholder (default is ">>").}
 }
 \value{
 A Word document saved to the specified output path with placeholders replaced by their respective values.
