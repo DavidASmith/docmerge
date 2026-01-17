@@ -1,7 +1,5 @@
-library(tibble)
-library(officer)
-
-input <- tibble(
+# Create example dataset for testing
+gift_details <- tibble::tibble(
   addr1 = c(
     "124 Conch St.",
     "32 Windsor Gardens",
@@ -25,18 +23,4 @@ input <- tibble(
   )
 )
 
-template <- "letter_template.docx"
-
-input |>
-  apply(1, function(x) {
-    #browser()
-    out_doc <- read_docx(template)
-    for (placeholder in names(x)) {
-      body_replace_all_text(
-        out_doc,
-        old_value = paste0("<<", placeholder, ">>"),
-        new_value = x[placeholder]
-      )
-    }
-    print(out_doc, target = paste0(x["name"], ".docx"))
-  })
+usethis::use_data(gift_details, overwrite = TRUE)
