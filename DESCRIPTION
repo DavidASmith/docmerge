@@ -1,6 +1,6 @@
 Package: docmerge
 Title: Generate word documents from a template and an input data frame
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person("David", "Smith", , "david.alex.smith@gmail.com", role = c("aut", "cre"))
 Description: Generate word documents from a template and an input data frame.
@@ -10,4 +10,11 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports: 
     dplyr,
-    officer
+    officer,
+    stringr
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Depends: 
+    R (>= 3.5)
+LazyData: true

@@ -4,11 +4,25 @@
 \alias{delete_paragraph_if_na}
 \title{Deletes the entire paragraph for the placeholder if the value is NA}
 \usage{
-delete_paragraph_if_na(doc, placeholder, value)
+delete_paragraph_if_na(doc, placeholder, value, ph_start = "<<", ph_end = ">>")
 }
 \arguments{
-\item{value}{}
+\item{doc}{A Word document object created by officer}
+
+\item{placeholder}{The placeholder name without angle brackets}
+
+\item{value}{The value to check for NA or NULL}
+
+\item{ph_start}{The string that denotes the start of a placeholder (default is "<<").}
+
+\item{ph_end}{The string that denotes the end of a placeholder (default is ">>").}
+}
+\value{
+A Word document object with the paragraph removed if value is NA or NULL
 }
 \description{
 Deletes the entire paragraph for the placeholder if the value is NA
+}
+\examples{
+\dontrun{delete_paragraph_if_na(doc, placeholder, value)}
 }

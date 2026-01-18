@@ -1,27 +1,45 @@
-
 # docmerge
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-**Very early development version. It might not work. It might change a lot.**
-
-The goal of docmerge is to ...
+docmerge helps you to generate multiple Microsoft Word documents from R. You can use a Word document as a template, with placeholders for text to be filled in from R. docmerge will create a separate Word document for each row of input data you provide.
 
 ## Installation
 
-You can install the development version of docmerge like so:
+You can install the development version of docmerge [GitHub](https://github.com/DavidASmith/docmerge) with:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# install.packages("devtools")
+devtools::install_github("DavidASmith/docmerge)")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Create a Word document to use as a template, with placeholders for the text you want to change in each output document. By default, placeholders are indicated by double angle brackets, e.g. `<<name>>`.
+
+An example template is included with the package. Its path can be found like this:
 
 ``` r
-library(docmerge)
-## basic example code
+example_template <- system.file(
+  "extdata",
+  "letter_template.docx",
+  package = "docmerge"
+)
 ```
 
+Then create a data frame with the data to fill in the placeholders. Column names must match the placeholders in your template. An example data frame is included in the package:
+
+``` r
+gift_details
+```
+
+Then use docmerge to generate documents (one for each row in the data frame):
+
+``` r
+docmerge(default_template, gift_details)
+```
+
+Output Word documents are written to the current working directory. You can specify an alternative using the `output_path` argument.
+
+Note that you can specify the output file name by including a column named `file_name` in your data frame. If this is absent, files will be named `1.docx`, `2.docx`, etc.

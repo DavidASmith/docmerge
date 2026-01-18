@@ -4,11 +4,31 @@
 \alias{sub_placeholders}
 \title{Subsitute placeholders}
 \usage{
-sub_placeholders(template_doc, replacements, output_doc)
+sub_placeholders(
+  template_doc,
+  replacements,
+  output_doc,
+  ph_start = "<<",
+  ph_end = ">>"
+)
 }
 \arguments{
-\item{output_doc}{}
+\item{template_doc}{The path to the template document.}
+
+\item{replacements}{A named list of placeholders and their corresponding values to replace in the template.}
+
+\item{output_doc}{The path where the modified document will be saved.}
+
+\item{ph_start}{The string that denotes the start of a placeholder (default is "<<").}
+
+\item{ph_end}{The string that denotes the end of a placeholder (default is ">>").}
+}
+\value{
+A Word document saved to the specified output path with placeholders replaced by their respective values.
 }
 \description{
 Subsitute placeholders
+}
+\examples{
+\dontrun{sub_placeholders("template.docx", list(name = "John Doe"), "output.docx")}
 }
